@@ -30,8 +30,8 @@ locals {
     },
   ]
 }
+
 module "mysecuritygroup" {
-  # create securitygroup folder and place securitygroup the module files
   source        = "./modules/securitygroup"
   sgname        = "my-bla-bla-$(lower(terraform.workspace))-sg"
   description   = "Bla Bla Security Group"
@@ -45,10 +45,9 @@ module "mysecuritygroup" {
   )}"
 }
 
-# Now use the security_group for instance provision module..
 module "instnaceprovision" {
   source                 = "....XXXX"
   image_id               = "XXXX"
   vpc_security_group_ids = concat(local.common_sg_ec2, tolist(["$module.mysecuritygroup.mutiportsecurityid"]))
-
+  #.... Use your custom code for provision.
 }

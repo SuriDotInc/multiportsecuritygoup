@@ -3,7 +3,6 @@ variable "vpc_id" {
   description = "The VPC ID that the security group belongs to"
 }
 
-
 variable "tags" {
   type        = map(string)
   description = "security group tags"
