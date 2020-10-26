@@ -24,3 +24,10 @@ variable "multi_port_sg" {
   type        = list(map(string))
   description = "Multiport and multi protocol  security group"
 }
+
+variable "multi_port_sg2" {
+  default     = []
+  type        = list(map(string))
+  description = "Multiport and multi protocol  security group"
+}
+
