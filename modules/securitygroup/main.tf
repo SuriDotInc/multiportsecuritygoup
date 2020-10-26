@@ -14,17 +14,16 @@ resource "aws_security_group" "multi_securitygroup" {
         to_port     = i.to_port
         protocol    = i.protocol
         description = i.description
-        cidr_blocks = i.cidr_blocks
+        security_groups = var.access_from_sg
       }
     ]
 
     content {
-      from_port   = ingress.from_port
-      to_port     = ingress.to_port
-      protocol    = ingress.protocol
-      description = ingress.description
-      cidr_blocks = compact(tolist(ingress.value.cidr_blocks[*]))
-
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      description = ingress.value.description
+      security_groups = [var.access_from_sg]
     }
   }
   egress {
@@ -35,3 +34,19 @@ resource "aws_security_group" "multi_securitygroup" {
 
   }
 }
+
+resource "aws_security_group_rule" "multi_securitygroup_rule" {
+  for_each = {for sec_rule in var.multi_port_sg2: sec_rule.from_port => sec_rule }
+  type = "ingress"
+  from_port = each.value.from_port
+  to_port = each.value.to_port
+  protocol = each.value.protocol
+  description = each.value.description
+  cidr_blocks = compact(tolist(each.value.cidr_blocks[*]))
+  security_group_id = aws_security_group.multi_securitygroup.id
+  }
+  
+  
+  
+  
+  
